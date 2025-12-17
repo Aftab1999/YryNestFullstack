@@ -1,0 +1,57 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Create an account</h2>
+    <p class="subtitle">Enter your details below to create your account</p>
+    
+    <form>
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input
+          type="text"
+          id="fullname"
+          placeholder="John Doe"
+          [(ngModel)]="formData.name"
+          name="name"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="name@example.com"
+          [(ngModel)]="formData.email"
+          name="email"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="formData.password"
+          name="password"
+        >
+      </div>
+
+      <!-- Ignore confirm password for now -->
+      
+      <button
+        type="button"
+        class="btn-submit"
+        (click)="onSubmit()"
+      >
+        Sign up
+      </button>
+    </form>
+    
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+      <p class="terms">
+        By signing up, you agree to our Terms of Service and Privacy Policy.
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,249 @@
+/* Global Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* Buttons */
+.btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-text {
+  color: #6200ea;
+  background: transparent;
+}
+
+.btn-primary {
+  background-color: #6200ea;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #3700b3;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #6200ea;
+  border: 2px solid #6200ea;
+}
+
+.btn-secondary:hover {
+  background-color: #f3e5f5;
+}
+
+.btn-white {
+  background-color: white;
+  color: #6200ea;
+  border: none;
+}
+
+.btn-white:hover {
+  background-color: #f0f0f0;
+}
+
+/* Hero Section */
+.hero {
+  padding: 5rem 5%;
+  text-align: center;
+  background-color: #f8f9fa;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Services Section */
+.services-section {
+  padding: 5rem 5%;
+  background-color: white;
+  text-align: center;
+}
+
+.services-section h2, .how-it-works h2, .cta-section h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.service-card {
+  padding: 2rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: left;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.service-card .icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.service-card p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.learn-more {
+  color: #6200ea;
+  font-weight: 600;
+}
+
+/* How It Works Section */
+.how-it-works {
+  padding: 5rem 5%;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.step {
+  padding: 1.5rem;
+}
+
+.step-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #e8eaf6;
+  color: #6200ea;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 auto 1.5rem auto;
+}
+
+.step h3 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.step p {
+  color: #666;
+}
+
+/* CTA Section */
+.cta-section {
+  padding: 5rem 5%;
+  background-color: #6200ea;
+  color: white;
+  text-align: center;
+}
+
+.cta-section h2 {
+  color: white;
+}
+
+.cta-section p {
+  max-width: 600px;
+  margin: 0 auto 2.5rem auto;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Footer */
+.footer {
+  background-color: #212121;
+  color: white;
+  padding: 4rem 5% 1rem 5%;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-column h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.footer-column p, .footer-column a {
+  display: block;
+  color: #bdbdbd;
+  margin-bottom: 0.8rem;
+  transition: color 0.3s;
+}
+
+.footer-column a:hover {
+  color: white;
+}
+
+.footer-bottom {
+  border-top: 1px solid #424242;
+  padding-top: 1.5rem;
+  text-align: center;
+  color: #757575;
+  font-size: 0.9rem;
+}

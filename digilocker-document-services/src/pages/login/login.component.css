@@ -1,0 +1,105 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3e5f5; /* Light purple bg */
+  padding: 20px;
+}
+
+.auth-card {
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fafafa;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6200ea;
+  background-color: white;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-password {
+  font-size: 12px;
+  color: #6200ea;
+  text-decoration: none;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-submit:hover {
+  background-color: #3700b3;
+}
+
+.auth-footer p {
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-footer a {
+  color: #6200ea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.terms {
+  margin-top: 15px;
+  font-size: 12px !important;
+  color: #999 !important;
+}

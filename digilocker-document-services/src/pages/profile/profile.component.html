@@ -1,0 +1,45 @@
+<div class="profile-container">
+  <h2>User Profile</h2>
+
+  <!-- Profile Image -->
+  <div class="profile-image">
+    <img
+      *ngIf="user.profileImage"
+      [src]="'http://localhost:3000' + user.profileImage"
+      alt="Profile Image"
+    />
+  </div>
+
+  <input type="file" (change)="onFileChange($event)" />
+  <!-- <button (click)="uploadImage">Upload Image</button> -->
+   <button (click)="uploadImage()">Upload Image</button>
+
+
+  <hr />
+
+  <!-- Profile Form -->
+  <form>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" [(ngModel)]="user.name" name="name" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" [value]="user.email" disabled />
+    </div>
+
+    <div class="form-group">
+      <label>Date of Birth</label>
+      <input
+        type="date"
+        [(ngModel)]="user.dateOfBirth"
+        name="dateOfBirth"
+      />
+    </div>
+
+    <button type="button" (click)="updateProfile()" [disabled]="loading">
+      Save Changes
+    </button>
+  </form>
+</div>

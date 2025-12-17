@@ -1,0 +1,43 @@
+<nav class="navbar">
+  <div class="logo">Digilocker</div>
+
+  <div class="nav-links">
+    <a routerLink="/home">Home</a>
+    <a routerLink="/home#services">Services</a>
+    <a routerLink="/home#contact">Contact</a>
+  </div>
+
+  <!-- NOT LOGGED IN -->
+  <div class="auth-buttons" *ngIf="!isLoggedIn">
+    <a routerLink="/login">Sign In</a>
+    <a routerLink="/signup">Register</a>
+  </div>
+
+  <!-- LOGGED IN -->
+
+  <!-- <div class="user-info" *ngIf="isLoggedIn">
+    <img
+      [src]="profileImage"
+      class="avatar"
+      alt="User"
+    />
+    <span class="user-name">{{ userName }}</span>
+    <button (click)="logout()">Logout</button>
+  </div> -->
+
+  <div class="user-info" *ngIf="isLoggedIn">
+  <img
+    [src]="profileImage"
+    (error)="profileImage = 'assets/default-user.png'"
+    class="avatar"
+    alt="User"
+  />
+  <span class="user-name">{{ userName }}</span>
+  <button (click)="logout()">Logout</button>
+</div>
+
+
+
+</nav>
+
+<router-outlet></router-outlet>
