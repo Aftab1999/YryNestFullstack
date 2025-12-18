@@ -3,7 +3,7 @@
     <h2>Sign in</h2>
     <p class="subtitle">Enter your email and password to access your account</p>
     
-    <form>
+    <form (ngSubmit)="onSubmit()">
 
         <div class="form-group">
       <label>Email</label>
@@ -22,8 +22,12 @@
         name="password"
       />
     </div>
+    
+    <div style="text-align: right; margin-bottom: 10px;">
+        <a routerLink="/forgot-password" class="forgot-password">Forgot Password?</a>
+    </div>
 
-    <button class="btn-submit" (click)="onSubmit()">
+    <button type="submit" class="btn-submit">
       Login
     </button>
       

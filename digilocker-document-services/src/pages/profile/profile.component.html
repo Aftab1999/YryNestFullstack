@@ -4,15 +4,15 @@
   <!-- Profile Image -->
   <div class="profile-image">
     <img
-      *ngIf="user.profileImage"
-      [src]="'http://localhost:3000' + user.profileImage"
-      alt="Profile Image"
+      [src]="user.profileImage ? 'http://localhost:3000' + user.profileImage + '?t=' + timestamp : 'assets/default-user.svg'"
+       (error)="user.profileImage = null"
+       alt="Profile Image"
     />
   </div>
 
   <input type="file" (change)="onFileChange($event)" />
   <!-- <button (click)="uploadImage">Upload Image</button> -->
-   <button (click)="uploadImage()">Upload Image</button>
+  <!-- <button (click)="uploadImage()">Upload Image</button> -->
 
 
   <hr />

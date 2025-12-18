@@ -26,15 +26,17 @@
   </div> -->
 
   <div class="user-info" *ngIf="isLoggedIn">
-  <img
-    [src]="profileImage"
-    (error)="profileImage = 'assets/default-user.png'"
-    class="avatar"
-    alt="User"
-  />
-  <span class="user-name">{{ userName }}</span>
-  <button (click)="logout()">Logout</button>
-</div>
+    <div class="profile-link" routerLink="/profile">
+      <img
+        [src]="profileImage"
+        (error)="profileImage = 'assets/default-user.svg'"
+        class="avatar"
+        alt="User"
+      />
+      <span class="user-name">{{ userName }}</span>
+    </div>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
 
 
 

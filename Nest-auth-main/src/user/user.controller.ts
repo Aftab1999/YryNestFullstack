@@ -89,27 +89,39 @@ export class UserController {
 
 
   @UseGuards(JwtGuard)
-@Post('profile/image')
-@UseInterceptors(
-  FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads/profile-images',
-      filename: (req, file, cb) => {
-        const uniqueName = `user-${req.user.id}${extname(file.originalname)}`;
-        cb(null, uniqueName);
-      },
+  @Post('profile/image')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+            const uploadPath = './uploads/profile-images';
+            // Ensure directory exists
+            const fs = require('fs');
+            if (!fs.existsSync(uploadPath)){
+                fs.mkdirSync(uploadPath, { recursive: true });
+            }
+            cb(null, uploadPath);
+        },
+        filename: (req: any, file, cb) => {
+          const uniqueName = `user-${req.user.id}${extname(file.originalname)}`;
+          cb(null, uniqueName);
+        },
+      }),
     }),
-  }),
-)
-async uploadProfileImage(
-  @Req() req: any,
-  @UploadedFile() file: Express.Multer.File,
-) {
-  const imagePath = `/uploads/profile-images/${file.filename}`;
-  return this.userService.updateProfile(req.user.id, {
-    profileImage: imagePath,
-  });
-}
+  )
+  async uploadProfileImage(
+    @Req() req: any,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+        throw new Error('File upload failed');
+    }
+    console.log('✅ File uploaded:', file);
+    const imagePath = `/uploads/profile-images/${file.filename}`;
+    return this.userService.updateProfile(req.user.id, {
+      profileImage: imagePath,
+    });
+  }
 
 
   // =========================
@@ -139,5 +151,19 @@ async uploadProfileImage(
     }
 
     return { success: true, user };
+  }
+
+  // =========================
+  // FORGOT PASSWORD
+  // =========================
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: { email: string }) {
+    return this.userService.forgotPassword(body.email);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() body: { token: string; newPass: string }) {
+    return this.userService.resetPassword(body.token, body.newPass);
   }
 }

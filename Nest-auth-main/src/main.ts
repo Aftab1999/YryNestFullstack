@@ -20,7 +20,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   // ✅ Serve uploaded images
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+  const uploadsPath = join(process.cwd(), 'uploads');
+  console.log(`📂 Serving static assets from: ${uploadsPath}`);
+  
+  app.useStaticAssets(uploadsPath, {
     prefix: '/uploads',
   });
 

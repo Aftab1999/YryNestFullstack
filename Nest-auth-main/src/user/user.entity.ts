@@ -34,6 +34,12 @@ export class User {
   })
   role: 'ADMIN' | 'USER';
 
+  @Column({ nullable: true })
+  resetPasswordToken: string;
+
+  @Column({ nullable: true })
+  resetPasswordExpires: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 }
