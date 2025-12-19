@@ -139,49 +139,70 @@ export class UserService {
   // FORGOT PASSWORD
   // =========================
 
-  async forgotPassword(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (!user) {
-      throw new NotFoundException('User with this email does not exist');
-    }
+async forgotPassword(email: string) {
+  const user = await this.userRepository.findOne({ where: { email } });
+  if (!user) {
+    throw new NotFoundException('User with this email does not exist');
+  }
 
-    const token = crypto.randomBytes(32).toString('hex');
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
+  const token = crypto.randomBytes(32).toString('hex');
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = new Date(Date.now() + 3600000); // 1 hour
 
-    await this.userRepository.save(user);
+  await this.userRepository.save(user);
 
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
-    const resetLink = `${frontendUrl}/reset-password?token=${token}`;
-    const recipientName = user.name ? user.name : 'User';
-    const subject = 'Reset your Digilocker password';
-    const textBody = `Dear ${recipientName},
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
+  const resetLink = `${frontendUrl}/reset-password?token=${token}`;
+  
+  // ✅ CRITICAL FIX: Send to the USER'S REAL EMAIL, not a test email
+  const recipientEmail = user.email; // This is the key change
+  const recipientName = user.name ? user.name : 'User';
+  
+  // ✅ Use a real subject (remove "TEST -")
+  const subject = 'Reset your Digilocker password';
+  const textBody = `Dear ${recipientName},
 
 You requested to reset your Digilocker account password.
 
 Reset your password using the link below:
 ${resetLink}
 
+This link will expire in 1 hour.
+
 If you did not request this, please ignore this email.`;
-    const htmlBody = `
-<div style="font-family: Arial, sans-serif; color:#333; max-width:600px; margin:auto; padding:24px;">
-  <h2 style="margin:0 0 12px;">Reset your password</h2>
+
+  const htmlBody = `
+<div style="font-family: Arial, sans-serif; color:#333; max-width:600px; margin:auto; padding:24px; border: 1px solid #e0e0e0; border-radius: 8px;">
+  <h2 style="margin:0 0 12px; color: #6200ea;">Reset Your Password</h2>
   <p style="margin:0 0 16px;">Dear ${recipientName},</p>
   <p style="margin:0 0 16px;">You requested to reset your Digilocker account password.</p>
   <p style="margin:0 0 24px;">Click the button below to reset your password:</p>
   <p style="margin:0 0 24px;">
-    <a href="${resetLink}" style="display:inline-block; background:#6200ea; color:#fff; text-decoration:none; padding:10px 16px; border-radius:4px;">Reset Password</a>
+    <a href="${resetLink}" style="display:inline-block; background:#6200ea; color:#fff; text-decoration:none; padding:12px 24px; border-radius:6px; font-weight:bold;">Reset Password</a>
   </p>
-  <p style="margin:0 0 8px;">If the button does not work, copy and paste this link into your browser:</p>
-  <p style="word-break:break-all; color:#555;">${resetLink}</p>
+  <p style="margin:0 0 8px; font-size:14px; color:#666;">If the button does not work, copy and paste this link into your browser:</p>
+  <p style="word-break:break-all; color:#555; background:#f9f9f9; padding:12px; border-radius:4px; font-size:14px;">${resetLink}</p>
+  <p style="font-size:12px; color:#999; margin:24px 0 8px 0;">
+    This link will expire in 1 hour. If you did not request this, you can safely ignore this email.
+  </p>
   <hr style="border:none; border-top:1px solid #eee; margin:24px 0;">
-  <p style="font-size:12px; color:#777; margin:0;">If you did not request this, you can safely ignore this email.</p>
+  <p style="font-size:11px; color:#777; margin:0;">Digilocker Support Team</p>
 </div>`;
 
-    await this.emailService.sendMail(user.email, subject, textBody, htmlBody);
+  console.log(`\n🔐 FORGOT PASSWORD REQUEST:`);
+  console.log(`   User: ${user.name} (ID: ${user.id})`);
+  console.log(`   Sending reset email to: ${recipientEmail}`); // Logs the real email
+  console.log(`   Reset Token: ${token}`);
+  console.log(`   Reset Link: ${resetLink}\n`);
 
-    return { message: 'Reset link sent' };
-  }
+  // ✅ Send to the user's actual email address
+  await this.emailService.sendMail(recipientEmail, subject, textBody, htmlBody);
+
+  return { 
+    message: 'Password reset link has been sent to your email',
+    // Removed test email note since it's now a real email
+  };
+}
 
   async resetPassword(token: string, newPass: string) {
     const user = await this.userRepository.findOne({ where: { resetPasswordToken: token } });

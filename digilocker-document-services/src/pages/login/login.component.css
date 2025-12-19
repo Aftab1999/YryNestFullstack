@@ -103,3 +103,71 @@ input:focus {
   font-size: 12px !important;
   color: #999 !important;
 }
+
+/* Validation Styles (same as signup) */
+.validation-error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 4px 0;
+}
+
+.validation-error div {
+  margin-bottom: 2px;
+}
+
+/* Style for invalid inputs */
+input.ng-invalid.ng-touched,
+input.ng-invalid.ng-dirty {
+  border-color: #d32f2f !important;
+}
+
+input.ng-valid.ng-touched {
+  border-color: #4caf50 !important;
+}
+
+/* Disabled button styling */
+.btn-submit.disabled,
+.btn-submit:disabled {
+  background-color: #bdbdbd !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+/* Forgot password link styling */
+.forgot-password {
+  color: #6200ea;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Optional: Add some animation for valid state */
+input.ng-valid.ng-touched {
+  transition: border-color 0.3s ease;
+}
+
+/* Form group spacing */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Input field styling */
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Focus state */
+input:focus {
+  outline: none;
+  border-color: #6200ea;
+  box-shadow: 0 0 0 2px rgba(98, 0, 234, 0.1);
+}

@@ -3,7 +3,10 @@
     <h2>Create an account</h2>
     <p class="subtitle">Enter your details below to create your account</p>
     
-    <form>
+    <!-- Add #signupForm="ngForm" and (ngSubmit) -->
+    <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
+      
+      <!-- Name Field -->
       <div class="form-group">
         <label for="fullname">Full Name</label>
         <input
@@ -12,9 +15,21 @@
           placeholder="John Doe"
           [(ngModel)]="formData.name"
           name="name"
+          required
+          minlength="2"
+          #nameInput="ngModel"
         >
+        
+        <!-- Validation messages for name -->
+        <div class="validation-error" *ngIf="nameInput.invalid && (nameInput.touched || nameInput.dirty)">
+          <div *ngIf="nameInput.errors?.['required']">Name is required</div>
+          <div *ngIf="nameInput.errors?.['minlength']">
+            Name must be at least {{nameInput.errors?.['minlength'].requiredLength}} characters
+          </div>
+        </div>
       </div>
 
+      <!-- Email Field -->
       <div class="form-group">
         <label for="email">Email</label>
         <input
@@ -23,27 +38,54 @@
           placeholder="name@example.com"
           [(ngModel)]="formData.email"
           name="email"
+          required
+          email
+          #emailInput="ngModel"
         >
+        
+        <!-- Validation messages for email -->
+        <div class="validation-error" *ngIf="emailInput.invalid && (emailInput.touched || emailInput.dirty)">
+          <div *ngIf="emailInput.errors?.['required']">Email is required</div>
+          <div *ngIf="emailInput.errors?.['email']">Please enter a valid email address</div>
+        </div>
       </div>
       
+      <!-- Password Field -->
       <div class="form-group">
         <label for="password">Password</label>
         <input
           type="password"
           id="password"
+          placeholder="Create a strong password"
           [(ngModel)]="formData.password"
           name="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
         >
+        
+        <!-- Validation messages for password -->
+        <div class="validation-error" *ngIf="passwordInput.invalid && (passwordInput.touched || passwordInput.dirty)">
+          <div *ngIf="passwordInput.errors?.['required']">Password is required</div>
+          <div *ngIf="passwordInput.errors?.['minlength']">
+            Password must be at least {{passwordInput.errors?.['minlength'].requiredLength}} characters
+          </div>
+        </div>
+        
+        <!-- Password hint -->
+        <div class="password-hint">
+          <small>Password must be at least 6 characters long</small>
+        </div>
       </div>
-
-      <!-- Ignore confirm password for now -->
       
+      <!-- Submit Button - Disabled when invalid or submitting -->
       <button
-        type="button"
+        type="submit"
         class="btn-submit"
-        (click)="onSubmit()"
+        [disabled]="signupForm.invalid || isSubmitting"
+        [class.disabled]="signupForm.invalid || isSubmitting"
       >
-        Sign up
+        {{ isSubmitting ? 'Creating account...' : 'Sign up' }}
       </button>
     </form>
     

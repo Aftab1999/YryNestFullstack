@@ -91,3 +91,45 @@ input:focus {
   font-size: 12px !important;
   color: #999 !important;
 }
+
+/* Validation Styles */
+.validation-error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 4px 0;
+}
+
+.validation-error div {
+  margin-bottom: 2px;
+}
+
+/* Style for invalid inputs */
+input.ng-invalid.ng-touched,
+input.ng-invalid.ng-dirty {
+  border-color: #d32f2f !important;
+}
+
+input.ng-valid.ng-touched {
+  border-color: #4caf50 !important;
+}
+
+/* Password hint */
+.password-hint {
+  margin-top: 4px;
+  color: #666;
+  font-size: 12px;
+}
+
+/* Disabled button styling */
+.btn-submit.disabled,
+.btn-submit:disabled {
+  background-color: #bdbdbd !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+/* Optional: Add some animation for valid state */
+input.ng-valid.ng-touched {
+  transition: border-color 0.3s ease;
+}

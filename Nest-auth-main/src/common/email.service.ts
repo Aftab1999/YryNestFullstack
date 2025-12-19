@@ -5,85 +5,93 @@ import * as nodemailer from 'nodemailer';
 export class EmailService {
   private transporter;
   private fromAddress = process.env.SMTP_FROM || '"Digilocker Support" <no-reply@digilocker.local>';
+  private etherealAccount: any = null;
 
   constructor() {
-    // Create a transporter using Ethereal (fake SMTP service) for development
-    // In production, use real credentials (e.g., Gmail, SendGrid)
     this.initTransporter();
   }
 
   async initTransporter() {
-    // Prefer real SMTP via env vars; fallback to Ethereal for dev
-    const host = process.env.SMTP_HOST;
-    const port = Number(process.env.SMTP_PORT || 0);
-    const secure = (process.env.SMTP_SECURE || 'false').toLowerCase() === 'true';
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASS;
-
-    if (host && port && user && pass) {
-      try {
-        this.transporter = nodemailer.createTransport({
-          host,
-          port,
-          secure,
-          auth: { user, pass },
-        });
-        console.log('[EmailService] Transporter initialized with real SMTP host:', host);
-        return;
-      } catch (e) {
-        console.error('Failed to create real SMTP transporter, falling back to Ethereal', e);
-      }
-    }
-
+    // For testing, let's ALWAYS use Ethereal (no real SMTP needed)
+    console.log('🚀 [EmailService] Setting up ETHEREAL email for TESTING...');
+    
     try {
-      const testAccount = await nodemailer.createTestAccount();
+      // Create a test Ethereal account
+      this.etherealAccount = await nodemailer.createTestAccount();
+      
       this.transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
         secure: false,
         auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
+          user: this.etherealAccount.user,
+          pass: this.etherealAccount.pass,
         },
       });
-      console.log('[EmailService] Transporter initialized with Ethereal');
+      
+      console.log('✅ [EmailService] Ethereal setup complete!');
+      console.log('📧 Ethereal Test Email:', this.etherealAccount.user);
+      console.log('🔑 Ethereal Test Password:', this.etherealAccount.pass);
+      console.log('🌐 Check emails at: https://ethereal.email/');
+      console.log('👉 Login with the email and password above\n');
+      
     } catch (e) {
-      console.error('Failed to create email transporter', e);
+      console.error('❌ Failed to create Ethereal test account:', e.message);
     }
   }
 
   async sendMail(to: string, subject: string, text: string, html: string) {
-    console.log(`[EmailService] Attempting to send email to ${to}`);
+    console.log('\n📧 ================= EMAIL SENDING =================');
+    console.log(`   To: ${to}`);
+    console.log(`   Subject: "${subject}"`);
     
-    // Always log to console as backup/fast-check
-    console.log('📧 ================= LOCAL LOG ================= 📧');
-    console.log(`To: ${to}`);
-    console.log(`Subject: ${subject}`);
-    // Extract link roughly for easy clicking in terminal
-    const linkMatch = text.match(/http:\/\/[^\s]+/);
+    // Extract and show the reset link
+    const linkMatch = text.match(/https?:\/\/[^\s]+/);
     if (linkMatch) {
-        console.log(`Link: ${linkMatch[0]}`);
-    } else {
-        console.log(`Body: ${text}`);
+      console.log(`   🔗 Reset Link: ${linkMatch[0]}`);
+      console.log(`   ✨ Click this link to reset password!`);
     }
-    console.log('📧 =========================================== 📧');
+    
+    console.log('\n   📝 Email Preview (first 200 chars):');
+    console.log('   ' + text.substring(0, 200).replace(/\n/g, '\n   ') + '...');
+    
+    if (!this.transporter) {
+      console.log('   ❌ Transporter not ready - email NOT sent');
+      console.log('==============================================\n');
+      return false;
+    }
 
-    if (this.transporter) {
-        try {
-            const info = await this.transporter.sendMail({
-                from: this.fromAddress,
-                to,
-                subject,
-                text,
-                html
-            });
-            console.log('✅ Email sent via Ethereal!');
-            console.log('👉 Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        } catch (err) {
-            console.error('❌ Error sending email via transporter:', err);
-        }
-    } else {
-        console.warn('⚠️ Transporter not ready, relying on console log.');
+    try {
+      const mailOptions = {
+        from: this.fromAddress,
+        to: to,
+        subject: subject,
+        text: text,
+        html: html,
+      };
+
+      console.log('   📤 Sending via Ethereal...');
+      const info = await this.transporter.sendMail(mailOptions);
+      
+      console.log(`   ✅ Email sent successfully!`);
+      console.log(`   📨 Message ID: ${info.messageId}`);
+      console.log(`   👉 PREVIEW EMAIL HERE: ${nodemailer.getTestMessageUrl(info)}`);
+      console.log('==============================================\n');
+      
+      // Also log the Ethereal login info again for easy access
+      if (this.etherealAccount) {
+        console.log('💡 QUICK ACCESS:');
+        console.log(`   Website: https://ethereal.email/`);
+        console.log(`   Email: ${this.etherealAccount.user}`);
+        console.log(`   Password: ${this.etherealAccount.pass}`);
+        console.log('');
+      }
+      
+      return true;
+    } catch (err) {
+      console.error(`   ❌ Error sending email: ${err.message}`);
+      console.log('==============================================\n');
+      return false;
     }
   }
 }

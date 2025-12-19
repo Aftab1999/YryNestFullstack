@@ -3,33 +3,66 @@
     <h2>Sign in</h2>
     <p class="subtitle">Enter your email and password to access your account</p>
     
-    <form (ngSubmit)="onSubmit()">
+    <!-- Add form reference and ngSubmit -->
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
 
-        <div class="form-group">
-      <label>Email</label>
-      <input
-        type="email"
-        [(ngModel)]="formData.email"
-        name="email"
-      />
-    </div>
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="name@example.com"
+          [(ngModel)]="formData.email"
+          name="email"
+          required
+          email
+          #emailInput="ngModel"
+        />
+        
+        <!-- Validation messages for email -->
+        <div class="validation-error" *ngIf="emailInput.invalid && (emailInput.touched || emailInput.dirty)">
+          <div *ngIf="emailInput.errors?.['required']">Email is required</div>
+          <div *ngIf="emailInput.errors?.['email']">Please enter a valid email address</div>
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label>Password</label>
-      <input
-        type="password"
-        [(ngModel)]="formData.password"
-        name="password"
-      />
-    </div>
-    
-    <div style="text-align: right; margin-bottom: 10px;">
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          [(ngModel)]="formData.password"
+          name="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        
+        <!-- Validation messages for password -->
+        <div class="validation-error" *ngIf="passwordInput.invalid && (passwordInput.touched || passwordInput.dirty)">
+          <div *ngIf="passwordInput.errors?.['required']">Password is required</div>
+          <div *ngIf="passwordInput.errors?.['minlength']">
+            Password must be at least {{passwordInput.errors?.['minlength'].requiredLength}} characters
+          </div>
+        </div>
+      </div>
+      
+      <div style="text-align: right; margin-bottom: 10px;">
         <a routerLink="/forgot-password" class="forgot-password">Forgot Password?</a>
-    </div>
+      </div>
 
-    <button type="submit" class="btn-submit">
-      Login
-    </button>
+      <!-- Submit Button - Disabled when invalid or submitting -->
+      <button 
+        type="submit" 
+        class="btn-submit"
+        [disabled]="loginForm.invalid || isSubmitting"
+        [class.disabled]="loginForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Logging in...' : 'Login' }}
+      </button>
       
     </form>
     
