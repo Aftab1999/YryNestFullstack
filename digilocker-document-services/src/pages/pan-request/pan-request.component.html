@@ -1,1 +1,97 @@
-<p>pan-request works!</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h5 mb-0">PAN Card Application</h2>
+        </div>
+        
+        <div class="card-body p-4">
+          <!-- Success Message -->
+          <div *ngIf="(panState$ | async)?.success" class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Application Submitted Successfully!</h4>
+            <p class="mb-0">Your PAN card application has been received. You can track the status in your dashboard.</p>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="(panState$ | async)?.error" class="alert alert-danger" role="alert">
+            {{ (panState$ | async)?.error?.message || 'Failed to submit PAN request. Please try again.' }}
+          </div>
+
+          <form [formGroup]="panForm" (ngSubmit)="onSubmit()" *ngIf="!(panState$ | async)?.success">
+            <!-- Full Name -->
+            <div class="mb-3">
+              <label for="fullName" class="form-label">Full Name (as per Aadhaar)</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="fullName" 
+                formControlName="fullName"
+                [ngClass]="{'is-invalid': isFieldInvalid('fullName')}"
+                placeholder="Enter your full name">
+              <div *ngIf="isFieldInvalid('fullName')" class="invalid-feedback">
+                <div *ngIf="panForm.get('fullName')?.errors?.['required']">Full name is required</div>
+                <div *ngIf="panForm.get('fullName')?.errors?.['pattern']">Only alphabets and spaces are allowed</div>
+              </div>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="mb-3">
+              <label for="dateOfBirth" class="form-label">Date of Birth</label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="dateOfBirth" 
+                formControlName="dateOfBirth"
+                [ngClass]="{'is-invalid': isFieldInvalid('dateOfBirth')}">
+              <div *ngIf="isFieldInvalid('dateOfBirth')" class="invalid-feedback">
+                Date of birth is required
+              </div>
+            </div>
+
+            <!-- Request Type -->
+            <div class="mb-4">
+              <label class="form-label">Request Type</label>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  id="newRequest" 
+                  value="NEW" 
+                  formControlName="requestType">
+                <label class="form-check-label" for="newRequest">New PAN Card</label>
+              </div>
+              <div class="form-check">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  id="correctionRequest" 
+                  value="CORRECTION" 
+                  formControlName="requestType">
+                <label class="form-check-label" for="correctionRequest">Correction in PAN Card</label>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="(panState$ | async)?.loading">
+                <span *ngIf="(panState$ | async)?.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                {{ (panState$ | async)?.loading ? 'Submitting...' : 'Submit Application' }}
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary" 
+                (click)="onBack()"
+                [disabled]="(panState$ | async)?.loading">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
